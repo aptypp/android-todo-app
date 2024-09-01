@@ -12,33 +12,53 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.artur.todoapp.TaskData
 import com.artur.todoapp.TodoViewModel
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun ProgramScreen(viewModel: TodoViewModel, coroutineScope: CoroutineScope) {
+fun ProgramScreen(viewModel: TodoViewModel) {
     val state by viewModel.state.collectAsState()
+
+    var uniqueIndex = 0
 
     Scaffold(
         topBar = { TopBar(state.topBarLabel) },
-        floatingActionButton = { FloatingButton(addRow = { viewModel.addRow() }) },
+        floatingActionButton = { FloatingButton(addRow = { viewModel.addTask(++uniqueIndex) }) },
         floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
-        TodoList(coroutineScope, innerPadding, state.taskCount)
+        TodoList(
+            innerPadding = innerPadding,
+            tasks = state.tasks,
+            removeTask = { viewModel.removeTask(it) },
+            changeTaskIsDone = { task, value -> viewModel.changeTaskIsDone(task, value) }
+        )
     }
 }
 
 @Composable
-fun TodoList(coroutineScope: CoroutineScope, innerPadding: PaddingValues, rowsCount: Int) {
+fun TodoList(
+    innerPadding: PaddingValues,
+    tasks: List<TaskData>,
+    removeTask: (TaskData) -> Unit,
+    changeTaskIsDone: (TaskData, Boolean) -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState()),
-        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            for (i in 0..rowsCount) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    TodoCard(coroutineScope)
+            for (task in tasks) {
+                key(task.id) {
+                    Divider(thickness = 1.dp)
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        TodoCard(
+                            task = task,
+                            removeTask = removeTask,
+                            changeTaskIsDone = changeTaskIsDone
+                        )
+                    }
                 }
             }
         }
@@ -55,55 +75,71 @@ fun TopBar(label: String) {
 
 @Composable
 fun FloatingButton(addRow: () -> Unit) {
-    FloatingActionButton(onClick = { addRow() }, containerColor = MaterialTheme.colorScheme.surface) {
+    FloatingActionButton(onClick = { addRow() }) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "")
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoCard(coroutineScope: CoroutineScope) {
-    var isDismissing by remember { mutableStateOf(false) }
+fun TodoCard(
+    task: TaskData,
+    removeTask: (TaskData) -> Unit,
+    changeTaskIsDone: (TaskData, Boolean) -> Unit
+) {
+    val state = rememberDismissState(positionalThreshold = { it * 0.075f })
 
-    val roundedRadius: Float by animateFloatAsState(if (isDismissing) 16.0f else 0.0f, label = "")
+    val isDismissed = state.currentValue == DismissValue.DismissedToEnd
 
-    val state = rememberDismissState(confirmValueChange = {
-        when (it) {
-            DismissValue.Default -> return@rememberDismissState false
-            DismissValue.DismissedToEnd -> return@rememberDismissState true
-            DismissValue.DismissedToStart -> return@rememberDismissState false
+    val alpha by animateFloatAsState(
+        targetValue = if (isDismissed) 0.0f else 1.0f,
+        label = "",
+        finishedListener = { removeTask(task) })
+
+    SwipeToDismiss(modifier = Modifier.alpha(alpha), state = state, background = {
+        Surface(color = MaterialTheme.colorScheme.errorContainer, modifier = Modifier.fillMaxSize()) {
+            Box {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "",
+                    modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp)
+                )
+            }
         }
-    }, positionalThreshold = { it * 0.075f })
+    }, dismissContent = {
+        var isDismissing by remember { mutableStateOf(false) }
 
-    isDismissing = state.dismissDirection == DismissDirection.StartToEnd
+        isDismissing = state.dismissDirection == DismissDirection.StartToEnd
 
-    SwipeToDismiss(
-        state = state,
-        background = {
-            Surface(color = MaterialTheme.colorScheme.errorContainer, modifier = Modifier.fillMaxSize()) {
-                Box {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "",
-                        modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp)
+        val roundedRadius: Float by animateFloatAsState(if (isDismissing) 16.0f else 0.0f, label = "")
+
+        Surface(
+            shape = RoundedCornerShape(topStart = roundedRadius.dp, bottomStart = roundedRadius.dp),
+            modifier = Modifier.fillMaxSize().height(75.dp),
+        ) {
+            Row {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Checkbox(
+                        checked = task.isDone,
+                        onCheckedChange = { changeTaskIsDone(task, it) },
                     )
                 }
-            }
-        },
-        dismissContent = {
-            Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(topStart = roundedRadius.dp, bottomStart = roundedRadius.dp),
-                modifier = Modifier.fillMaxSize().height(75.dp)
-            ) {
-                Box {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
                     Text(
-                        text = "Is Dismissing $isDismissing",
-                        modifier = Modifier.padding(4.dp).align(Alignment.CenterStart)
+                        text = task.name, textDecoration = if (task.isDone) TextDecoration.LineThrough else null
                     )
                 }
+
             }
-        },
-        directions = setOf(DismissDirection.StartToEnd)
+        }
+    }, directions = setOf(DismissDirection.StartToEnd)
     )
 }

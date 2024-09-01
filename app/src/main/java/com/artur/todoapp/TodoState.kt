@@ -1,6 +1,6 @@
 package com.artur.todoapp
 
 data class TodoState(
-    val taskCount: Int,
+    val tasks: List<TaskData>,
     val topBarLabel: String
 )
