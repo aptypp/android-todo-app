@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(TodoState(listOf(), "Tasks"));
+    private val _state = MutableStateFlow(TodoState(listOf(), "Tasks"))
     val state get() = _state.asStateFlow()
 
     fun addTask(index: Int) {
