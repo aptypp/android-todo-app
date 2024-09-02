@@ -5,10 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.artur.todoapp.presentation.ui.taskslist.TasksListViewModel
-import com.artur.todoapp.presentation.ui.taskslist.TasksListScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.artur.todoapp.domain.model.TaskData
+import com.artur.todoapp.presentation.navigation.CreateTaskRoute
+import com.artur.todoapp.presentation.navigation.TasksListRoute
 import com.artur.todoapp.presentation.theme.TodoAppTheme
+import com.artur.todoapp.presentation.ui.createtask.CreateTaskScreen
+import com.artur.todoapp.presentation.ui.taskslist.TasksListScreen
+import com.artur.todoapp.presentation.ui.taskslist.TasksListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -18,8 +26,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+
             TodoAppTheme {
-                TasksListScreen(viewModel)
+                NavHost(
+                    navController = navController, startDestination = TasksListRoute
+                ) {
+                    composable<TasksListRoute> {
+                        TasksListScreen(viewModel, navController)
+                    }
+                    composable<CreateTaskRoute> {
+                        CreateTaskScreen(
+                            navController
+                        ) { name, desc ->
+                            viewModel.addTask(
+                                TaskData(
+                                    name = name, description = desc, id = UUID.randomUUID()
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
