@@ -10,6 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.artur.todoapp.presentation.ui.taskslist.components.TopBar
 
@@ -23,6 +25,10 @@ fun CreateTaskScreen(navController: NavHostController, addTask: (String, String)
         topBar = { TopBar("Create task") },
         floatingActionButton = {
             FloatingActionButton(onClick = {
+                val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return@FloatingActionButton
+
                 val nameData = nameInput.trim()
                 val descriptionData = descriptionInput.trim()
 

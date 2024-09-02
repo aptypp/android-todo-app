@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,23 +32,33 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
+            var isTransitioning by remember { mutableStateOf(true) }
+
+            navController.addOnDestinationChangedListener { a, b, c ->
+                isTransitioning = false
+            }
+
             TodoAppTheme {
                 NavHost(
-                    navController = navController, startDestination = TasksListRoute
+                    navController = navController,
+                    startDestination = TasksListRoute,
                 ) {
                     composable<TasksListRoute> {
-                        TasksListScreen(viewModel, navController)
+                        TasksListScreen(
+                            viewModel = viewModel,
+                            navController = navController)
                     }
                     composable<CreateTaskRoute> {
                         CreateTaskScreen(
-                            navController
-                        ) { name, desc ->
-                            viewModel.addTask(
-                                TaskData(
-                                    name = name, description = desc, id = UUID.randomUUID()
+                            navController = navController,
+                            addTask = { name, desc ->
+                                viewModel.addTask(
+                                    TaskData(
+                                        name = name, description = desc, id = UUID.randomUUID()
+                                    )
                                 )
-                            )
-                        }
+                            }
+                        )
                     }
                 }
             }
