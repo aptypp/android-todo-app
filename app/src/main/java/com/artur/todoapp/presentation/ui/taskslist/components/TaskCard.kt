@@ -21,7 +21,7 @@ fun TaskCard(
     removeTask: (TaskData) -> Unit,
     changeTaskIsDone: (TaskData, Boolean) -> Unit
 ) {
-    val state = rememberDismissState(positionalThreshold = { it * 0.075f })
+    val state = rememberDismissState(positionalThreshold = { it * 0.125f })
 
     val isDismissed = state.currentValue == DismissValue.DismissedToEnd
 
