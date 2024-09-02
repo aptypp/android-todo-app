@@ -10,9 +10,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
 fun FloatingButton(addRow: () -> Unit) {
-    FloatingActionButton(onClick = {
-        val lifecycle = LocalLifecycleOwner.current.lifecycle
 
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    FloatingActionButton(onClick = {
         if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return@FloatingActionButton
         addRow()
     }) {

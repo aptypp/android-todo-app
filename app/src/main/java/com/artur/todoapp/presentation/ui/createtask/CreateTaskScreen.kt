@@ -21,11 +21,12 @@ fun CreateTaskScreen(navController: NavHostController, addTask: (String, String)
     var nameInput: String by remember { mutableStateOf("") }
     var descriptionInput: String by remember { mutableStateOf("") }
 
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
     Scaffold(
         topBar = { TopBar("Create task") },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                val lifecycle = LocalLifecycleOwner.current.lifecycle
 
                 if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return@FloatingActionButton
 
