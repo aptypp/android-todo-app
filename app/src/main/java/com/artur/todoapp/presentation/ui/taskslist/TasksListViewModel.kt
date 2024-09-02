@@ -1,6 +1,7 @@
-package com.artur.todoapp
+package com.artur.todoapp.presentation.ui.taskslist
 
 import androidx.lifecycle.ViewModel
+import com.artur.todoapp.domain.model.TaskData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,9 +9,9 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class TodoViewModel @Inject constructor() : ViewModel() {
+class TasksListViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(
-        TodoState(
+        TasksListState(
             listOf(),
             "Tasks"
         )

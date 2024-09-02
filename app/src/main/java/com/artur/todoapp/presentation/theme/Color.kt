@@ -1,4 +1,4 @@
-package com.artur.todoapp.ui.theme
+package com.artur.todoapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

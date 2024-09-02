@@ -1,20 +1,18 @@
-package com.artur.todoapp.ui.elements
+package com.artur.todoapp.presentation.ui.taskslist
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import com.artur.todoapp.TaskData
-import com.artur.todoapp.TodoViewModel
+import com.artur.todoapp.domain.model.TaskData
+import com.artur.todoapp.presentation.ui.taskslist.components.FloatingButton
+import com.artur.todoapp.presentation.ui.taskslist.components.TasksList
+import com.artur.todoapp.presentation.ui.taskslist.components.TopBar
 import java.util.*
 
 @Composable
-fun ProgramScreen(viewModel: TodoViewModel) {
+fun TasksListScreen(viewModel: TasksListViewModel) {
     val state by viewModel.state.collectAsState()
 
     Scaffold(
@@ -31,7 +29,7 @@ fun ProgramScreen(viewModel: TodoViewModel) {
         },
         floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
-        TodoList(innerPadding = innerPadding,
+        TasksList(innerPadding = innerPadding,
             tasks = state.tasks,
             removeTask = { viewModel.removeTask(it) },
             changeTaskIsDone = { task, value ->
@@ -40,12 +38,5 @@ fun ProgramScreen(viewModel: TodoViewModel) {
                     value
                 )
             })
-    }
-}
-
-@Composable
-fun TaskCreatorScreen(innerPadding: PaddingValues) {
-    Surface(modifier = Modifier.padding(innerPadding)) {
-
     }
 }

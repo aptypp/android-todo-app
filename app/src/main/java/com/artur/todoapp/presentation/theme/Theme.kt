@@ -1,4 +1,4 @@
-package com.artur.todoapp.ui.theme
+package com.artur.todoapp.presentation.theme
 
 import android.app.Activity
 import android.os.Build
@@ -10,7 +10,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat

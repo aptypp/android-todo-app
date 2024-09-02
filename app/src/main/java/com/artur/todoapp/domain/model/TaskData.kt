@@ -1,4 +1,4 @@
-package com.artur.todoapp
+package com.artur.todoapp.domain.model
 
 import java.util.*
 

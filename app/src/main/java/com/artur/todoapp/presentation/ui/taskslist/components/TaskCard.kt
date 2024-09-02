@@ -1,4 +1,4 @@
-package com.artur.todoapp.ui.elements
+package com.artur.todoapp.presentation.ui.taskslist.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.artur.todoapp.TaskData
+import com.artur.todoapp.domain.model.TaskData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoCard(
+fun TaskCard(
     task: TaskData,
     removeTask: (TaskData) -> Unit,
     changeTaskIsDone: (TaskData, Boolean) -> Unit
