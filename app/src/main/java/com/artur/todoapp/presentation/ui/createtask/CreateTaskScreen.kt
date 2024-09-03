@@ -23,35 +23,35 @@ fun CreateTaskScreen(navController: NavHostController, addTask: (String, String)
 
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    Scaffold(
-        topBar = { TopBar("Create task") },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
+    Scaffold(topBar = { TopBar(label = "Create task") }, floatingActionButton = {
+        FloatingActionButton(onClick = {
 
-                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return@FloatingActionButton
+            if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return@FloatingActionButton
 
-                val nameData = nameInput.trim()
-                val descriptionData = descriptionInput.trim()
+            val nameData = nameInput.trim()
+            val descriptionData = descriptionInput.trim()
 
-                if (nameData.isEmpty()) {
-                    isNameNotValid = true
-                    return@FloatingActionButton
-                }
-
-                addTask(
-                    nameData,
-                    descriptionData,
-                )
-                navController.navigateUp()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Done, contentDescription = ""
-                )
+            if (nameData.isEmpty()) {
+                isNameNotValid = true
+                return@FloatingActionButton
             }
-        },
-        floatingActionButtonPosition = FabPosition.End
+
+            addTask(
+                nameData,
+                descriptionData,
+            )
+            navController.navigateUp()
+        }) {
+            Icon(
+                imageVector = Icons.Filled.Done, contentDescription = ""
+            )
+        }
+    }, floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
-        Surface(modifier = Modifier.padding(innerPadding)) {
+        Surface(
+            modifier = Modifier.padding(innerPadding),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        ) {
             val keyboard = LocalSoftwareKeyboardController.current
 
             Column {

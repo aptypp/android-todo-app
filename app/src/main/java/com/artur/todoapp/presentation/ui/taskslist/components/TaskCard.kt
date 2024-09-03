@@ -1,6 +1,7 @@
 package com.artur.todoapp.presentation.ui.taskslist.components
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -19,6 +20,7 @@ import com.artur.todoapp.domain.model.TaskData
 fun TaskCard(
     task: TaskData,
     removeTask: (TaskData) -> Unit,
+    openTaskViewer: (TaskData) -> Unit,
     changeTaskIsDone: (TaskData, Boolean) -> Unit
 ) {
     val state = rememberDismissState(positionalThreshold = { it * 0.125f })
@@ -30,7 +32,7 @@ fun TaskCard(
         finishedListener = { removeTask(task) })
 
     SwipeToDismiss(state = state,
-        modifier = Modifier.alpha(alpha),
+        modifier = Modifier.alpha(alpha).clickable { openTaskViewer(task) },
         directions = setOf(DismissDirection.StartToEnd),
         background = {
             Surface(
