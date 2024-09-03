@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.artur.todoapp.domain.model.TaskData
@@ -29,31 +30,26 @@ fun TaskCard(
 
     val isDismissed = state.currentValue == DismissValue.DismissedToEnd
 
-    val alpha by animateFloatAsState(targetValue = if (isDismissed) 0.0f else 1.0f,
+    val alpha by animateFloatAsState(
+        targetValue = if (isDismissed) 0.0f else 1.0f,
         label = "",
         finishedListener = { removeTask(task) })
 
-    Box(
-        Modifier.padding(padding)
-            .height(75.dp)
-            .wrapContentSize()
+    Surface(
+        Modifier.padding(padding).height(75.dp).wrapContentSize(), color = Color.Transparent
     ) {
         SwipeToDismiss(state = state,
-            modifier = Modifier.alpha(alpha)
-                .clickable { openTaskViewer(task) },
+            modifier = Modifier.alpha(alpha).clickable { openTaskViewer(task) },
             directions = setOf(DismissDirection.StartToEnd),
             background = {
                 Surface(
-                    color = MaterialTheme.colorScheme.errorContainer,
-                    modifier = Modifier.fillMaxSize(),
-                    shape = shape
+                    color = MaterialTheme.colorScheme.errorContainer, modifier = Modifier.fillMaxSize(), shape = shape
                 ) {
                     Box {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "",
-                            modifier = Modifier.align(Alignment.CenterStart)
-                                .padding(start = 8.dp)
+                            modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp)
                         )
                     }
                 }
@@ -64,17 +60,13 @@ fun TaskCard(
                 isDismissing = state.dismissDirection == DismissDirection.StartToEnd
 
                 val roundedRadius: Float by animateFloatAsState(
-                    if (isDismissing) 16.0f else 0.0f,
-                    label = ""
+                    if (isDismissing) 16.0f else 0.0f, label = ""
                 )
 
                 Surface(
                     shape = if (isDismissing) RoundedCornerShape(
-                        topStart = roundedRadius.dp,
-                        bottomStart = roundedRadius.dp
-                    ) else shape,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                        topStart = roundedRadius.dp, bottomStart = roundedRadius.dp
+                    ) else shape, modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Row {
                         Column(
@@ -86,8 +78,7 @@ fun TaskCard(
                                 checked = task.isDone,
                                 onCheckedChange = {
                                     changeTaskIsDone(
-                                        task,
-                                        it
+                                        task, it
                                     )
                                 },
                             )

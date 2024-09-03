@@ -62,6 +62,10 @@ fun TasksList(
             val firstPadding = PaddingValues(0.dp)
             val otherPadding = PaddingValues(top = averagePadding)
 
+            val shapeLonely = RoundedCornerShape(
+                averageRound
+            )
+
             val shapeFirst = RoundedCornerShape(
                 topStart = averageRound,
                 topEnd = averageRound
@@ -82,7 +86,7 @@ fun TasksList(
 
                 val padding = if (taskIndex == 0) firstPadding else otherPadding
                 val shape = when (taskIndex) {
-                    0 -> shapeFirst
+                    0 -> if (tasks.size == 1) shapeLonely else shapeFirst
                     tasks.indices.last -> shapeLast
                     else -> shapeBetween
                 }
