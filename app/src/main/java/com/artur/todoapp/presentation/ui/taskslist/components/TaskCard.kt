@@ -21,7 +21,9 @@ fun TaskCard(
     task: TaskData,
     removeTask: (TaskData) -> Unit,
     openTaskViewer: (TaskData) -> Unit,
-    changeTaskIsDone: (TaskData, Boolean) -> Unit
+    changeTaskIsDone: (TaskData, Boolean) -> Unit,
+    padding: PaddingValues,
+    shape: RoundedCornerShape
 ) {
     val state = rememberDismissState(positionalThreshold = { it * 0.125f })
 
@@ -31,71 +33,80 @@ fun TaskCard(
         label = "",
         finishedListener = { removeTask(task) })
 
-    SwipeToDismiss(state = state,
-        modifier = Modifier.alpha(alpha).clickable { openTaskViewer(task) },
-        directions = setOf(DismissDirection.StartToEnd),
-        background = {
-            Surface(
-                color = MaterialTheme.colorScheme.errorContainer,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Box {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "",
-                        modifier = Modifier.align(Alignment.CenterStart)
-                            .padding(start = 8.dp)
-                    )
-                }
-            }
-        },
-        dismissContent = {
-            var isDismissing by remember { mutableStateOf(false) }
-
-            isDismissing = state.dismissDirection == DismissDirection.StartToEnd
-
-            val roundedRadius: Float by animateFloatAsState(
-                if (isDismissing) 16.0f else 0.0f,
-                label = ""
-            )
-
-            Surface(
-                shape = RoundedCornerShape(
-                    topStart = roundedRadius.dp,
-                    bottomStart = roundedRadius.dp
-                ),
-                modifier = Modifier.fillMaxSize()
-                    .height(75.dp),
-            ) {
-                Row {
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Checkbox(
-                            checked = task.isDone,
-                            onCheckedChange = {
-                                changeTaskIsDone(
-                                    task,
-                                    it
-                                )
-                            },
+    Box(
+        Modifier.padding(padding)
+            .height(75.dp)
+            .wrapContentSize()
+    ) {
+        SwipeToDismiss(state = state,
+            modifier = Modifier.alpha(alpha)
+                .clickable { openTaskViewer(task) },
+            directions = setOf(DismissDirection.StartToEnd),
+            background = {
+                Surface(
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    modifier = Modifier.fillMaxSize(),
+                    shape = shape
+                ) {
+                    Box {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "",
+                            modifier = Modifier.align(Alignment.CenterStart)
+                                .padding(start = 8.dp)
                         )
                     }
-                    Column(
-                        modifier = Modifier.fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = task.name,
-                            color = if (task.isDone) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                            textDecoration = if (task.isDone) TextDecoration.LineThrough else null
-                        )
-                    }
-
                 }
-            }
-        })
+            },
+            dismissContent = {
+                var isDismissing by remember { mutableStateOf(false) }
+
+                isDismissing = state.dismissDirection == DismissDirection.StartToEnd
+
+                val roundedRadius: Float by animateFloatAsState(
+                    if (isDismissing) 16.0f else 0.0f,
+                    label = ""
+                )
+
+                Surface(
+                    shape = if (isDismissing) RoundedCornerShape(
+                        topStart = roundedRadius.dp,
+                        bottomStart = roundedRadius.dp
+                    ) else shape,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    Row {
+                        Column(
+                            modifier = Modifier.fillMaxHeight(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Checkbox(
+                                checked = task.isDone,
+                                onCheckedChange = {
+                                    changeTaskIsDone(
+                                        task,
+                                        it
+                                    )
+                                },
+                            )
+                        }
+                        Column(
+                            modifier = Modifier.fillMaxHeight(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = task.name,
+                                color = if (task.isDone) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                                textDecoration = if (task.isDone) TextDecoration.LineThrough else null
+                            )
+                        }
+
+                    }
+                }
+            })
+
+    }
 }
