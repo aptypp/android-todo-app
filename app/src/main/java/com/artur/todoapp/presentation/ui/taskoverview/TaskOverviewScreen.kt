@@ -26,8 +26,9 @@ fun TaskOverviewScreen(
     description: String,
     changeTaskData: (Long, String, String) -> Unit
 ) {
-    val averagePadding = 12.dp
-    val averageRound = 12.dp
+    val averagePadding = 8.dp
+    val averageRound = 8.dp
+    val surfaceRound = 16.dp
 
     var inputName by remember { mutableStateOf(name) }
     var inputDescription by remember { mutableStateOf(description) }
@@ -71,10 +72,10 @@ fun TaskOverviewScreen(
             modifier = Modifier.padding(innerPadding).fillMaxSize()
         ) {
             Surface(
-                shape = RoundedCornerShape(averageRound),
+                shape = RoundedCornerShape(surfaceRound),
                 modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(
-                        start = averagePadding, end = averagePadding
-                    )
+                    start = averagePadding, end = averagePadding
+                )
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
@@ -84,7 +85,8 @@ fun TaskOverviewScreen(
                             value = inputName,
                             onValueChange = { inputName = it },
                             singleLine = true,
-                            modifier = Modifier.fillMaxWidth().padding(averagePadding),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(top = averagePadding, start = averagePadding, end = averagePadding),
                             shape = RoundedCornerShape(
                                 topStart = averageRound, topEnd = averageRound
                             ),
@@ -94,11 +96,6 @@ fun TaskOverviewScreen(
                             },
                         )
                     }
-                    Divider(
-                        modifier = Modifier.fillMaxWidth().padding(
-                                start = averagePadding, end = averagePadding
-                            )
-                    )
                     Row {
                         TextField(
                             value = inputDescription,

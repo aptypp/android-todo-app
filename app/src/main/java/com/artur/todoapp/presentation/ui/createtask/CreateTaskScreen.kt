@@ -22,8 +22,9 @@ fun CreateTaskScreen(
     navController: NavHostController,
     addTask: (String, String) -> Unit
 ) {
-    val averagePadding = 12.dp
-    val averageRound = 12.dp
+    val averagePadding = 8.dp
+    val averageRound = 8.dp
+    val surfaceRound = 16.dp
 
     var inputName by remember { mutableStateOf("") }
     var inputDescription by remember { mutableStateOf("") }
@@ -78,7 +79,7 @@ fun CreateTaskScreen(
                 .fillMaxSize()
         ) {
             Surface(
-                shape = RoundedCornerShape(averageRound),
+                shape = RoundedCornerShape(surfaceRound),
                 modifier = Modifier.wrapContentHeight()
                     .fillMaxWidth()
                     .padding(
@@ -96,7 +97,7 @@ fun CreateTaskScreen(
                             onValueChange = { inputName = it },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
-                                .padding(averagePadding),
+                                .padding(top = averagePadding, start = averagePadding, end = averagePadding),
                             shape = RoundedCornerShape(
                                 topStart = averageRound,
                                 topEnd = averageRound
@@ -107,13 +108,6 @@ fun CreateTaskScreen(
                             },
                         )
                     }
-                    Divider(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(
-                                start = averagePadding,
-                                end = averagePadding
-                            )
-                    )
                     Row {
                         TextField(
                             value = inputDescription,

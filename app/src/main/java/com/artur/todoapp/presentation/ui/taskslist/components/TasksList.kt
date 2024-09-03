@@ -39,11 +39,12 @@ fun TasksList(
 ) {
     val averageRound = 8.dp
     val averagePadding = 8.dp
+    val surfaceRound = 16.dp
 
     Surface(
         modifier = Modifier.fillMaxWidth().padding(
             start = averagePadding, end = averagePadding
-        ), shape = RoundedCornerShape(averageRound), color = MaterialTheme.colorScheme.surface
+        ), shape = RoundedCornerShape(surfaceRound), color = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(averagePadding)
