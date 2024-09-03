@@ -65,15 +65,15 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
                 ) {
                     Row {
                         TextField(
-                            value = name,
-                            onValueChange = {},
+                            value = inputName,
+                            onValueChange = { inputName = it },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth().padding(averagePadding),
                             shape = RoundedCornerShape(topStart = averageRound, topEnd = averageRound),
+                            colors = textFieldColors,
                             label = {
                                 Text("Name")
                             },
-                            colors = textFieldColors
                         )
                     }
                     Divider(
@@ -81,14 +81,14 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
                     )
                     Row {
                         TextField(
-                            value = description,
-                            onValueChange = {},
+                            value = inputDescription,
+                            onValueChange = { inputDescription = it },
                             modifier = Modifier.fillMaxWidth().padding(averagePadding),
                             shape = RoundedCornerShape(bottomStart = averageRound, bottomEnd = averageRound),
+                            colors = textFieldColors,
                             label = {
                                 Text("Description")
                             },
-                            colors = textFieldColors
                         )
                     }
                 }
