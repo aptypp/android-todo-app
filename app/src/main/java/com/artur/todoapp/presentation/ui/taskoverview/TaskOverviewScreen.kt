@@ -19,11 +19,19 @@ import com.artur.todoapp.presentation.ui.taskslist.components.TopBar
 @Composable
 @Preview(showSystemUi = false)
 private fun Preview() {
-    TaskOverviewScreen(null, "Order a pizza", "Pepperoni with cheese borders\nMargaritta with extra corn")
+    TaskOverviewScreen(
+        null,
+        "Order a pizza",
+        "Pepperoni with cheese borders\nMargaritta with extra corn"
+    )
 }
 
 @Composable
-fun TaskOverviewScreen(navController: NavHostController?, name: String, description: String) {
+fun TaskOverviewScreen(
+    navController: NavHostController?,
+    name: String,
+    description: String
+) {
     val averagePadding = 12.dp
     val averageRound = 12.dp
 
@@ -32,7 +40,10 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
 
     val isDataChanged = inputName != name || inputDescription != description
 
-    val fabScale by animateFloatAsState(if (isDataChanged) 1.0f else 0.0f, label = "")
+    val fabScale by animateFloatAsState(
+        if (isDataChanged) 1.0f else 0.0f,
+        label = ""
+    )
 
     val textFieldColors = TextFieldDefaults.colors(
         focusedIndicatorColor = Color.Transparent,
@@ -49,17 +60,27 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
                     onClick = {},
                     modifier = Modifier.scale(fabScale)
                 ) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "")
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = ""
+                    )
                 }
             }
         },
         floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+        Box(
+            modifier = Modifier.padding(innerPadding)
+                .fillMaxSize()
+        ) {
             Surface(
                 shape = RoundedCornerShape(averageRound),
-                modifier = Modifier.wrapContentHeight().fillMaxWidth()
-                    .padding(start = averagePadding, end = averagePadding)
+                modifier = Modifier.wrapContentHeight()
+                    .fillMaxWidth()
+                    .padding(
+                        start = averagePadding,
+                        end = averagePadding
+                    )
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,8 +91,12 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
                             value = inputName,
                             onValueChange = { inputName = it },
                             singleLine = true,
-                            modifier = Modifier.fillMaxWidth().padding(averagePadding),
-                            shape = RoundedCornerShape(topStart = averageRound, topEnd = averageRound),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(averagePadding),
+                            shape = RoundedCornerShape(
+                                topStart = averageRound,
+                                topEnd = averageRound
+                            ),
                             colors = textFieldColors,
                             label = {
                                 Text("Name")
@@ -79,14 +104,22 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
                         )
                     }
                     Divider(
-                        modifier = Modifier.fillMaxWidth().padding(start = averagePadding, end = averagePadding)
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(
+                                start = averagePadding,
+                                end = averagePadding
+                            )
                     )
                     Row {
                         TextField(
                             value = inputDescription,
                             onValueChange = { inputDescription = it },
-                            modifier = Modifier.fillMaxWidth().padding(averagePadding),
-                            shape = RoundedCornerShape(bottomStart = averageRound, bottomEnd = averageRound),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(averagePadding),
+                            shape = RoundedCornerShape(
+                                bottomStart = averageRound,
+                                bottomEnd = averageRound
+                            ),
                             colors = textFieldColors,
                             label = {
                                 Text("Description")
