@@ -39,11 +39,12 @@ fun TasksListScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            TasksList(tasks = state.tasks,
+            TasksList(tasks = state.tasks.reversed(),
                 removeTask = { viewModel.removeTask(it) },
                 openTaskViewer = {
                     navController.navigate(
                         TaskOverviewRoute(
+                            it.id,
                             it.name,
                             it.description
                         )

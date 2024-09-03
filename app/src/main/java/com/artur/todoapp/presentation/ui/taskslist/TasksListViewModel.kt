@@ -59,4 +59,18 @@ class TasksListViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun changeTaskData(id: Long, name: String, description: String) {
+        _state.update {
+            val newList = it.tasks.toMutableList().apply {
+                val task = find { it.id == id }
+
+                if (task == null) return@apply
+
+                val index = indexOf(task)
+                set(index, task.copy(name = name, description = description))
+            }
+
+            it.copy(tasks = newList)
+        }
+    }
 }

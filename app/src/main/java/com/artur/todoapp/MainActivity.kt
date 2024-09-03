@@ -19,7 +19,7 @@ import com.artur.todoapp.presentation.ui.taskoverview.TaskOverviewScreen
 import com.artur.todoapp.presentation.ui.taskslist.TasksListScreen
 import com.artur.todoapp.presentation.ui.taskslist.TasksListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                         CreateTaskScreen(navController = navController, addTask = { name, desc ->
                             viewModel.addTask(
                                 TaskData(
-                                    name = name, description = desc, id = UUID.randomUUID()
+                                    name = name, description = desc, id = Random.nextLong()
                                 )
                             )
                         })
@@ -53,7 +53,13 @@ class MainActivity : ComponentActivity() {
                     composable<TaskOverviewRoute> { backStack ->
                         val route = backStack.toRoute<TaskOverviewRoute>()
                         TaskOverviewScreen(
-                            navController = navController, name = route.name, description = route.description
+                            navController = navController,
+                            id = route.id,
+                            name = route.name,
+                            description = route.description,
+                            changeTaskData = { id, name, description ->
+                                viewModel.changeTaskData(id, name, description)
+                            }
                         )
                     }
                 }
