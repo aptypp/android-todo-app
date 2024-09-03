@@ -44,11 +44,13 @@ fun TaskOverviewScreen(navController: NavHostController?, name: String, descript
         topBar = { TopBar("Overview") },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {},
-                modifier = Modifier.scale(fabScale)
-            ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "")
+            Box(modifier = Modifier.imePadding()) {
+                FloatingActionButton(
+                    onClick = {},
+                    modifier = Modifier.scale(fabScale)
+                ) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "")
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End
