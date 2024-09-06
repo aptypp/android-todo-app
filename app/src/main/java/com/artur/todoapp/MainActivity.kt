@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val animationDuration = 500
 
             TodoAppTheme {
                 NavHost(
@@ -40,14 +43,30 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel, navController = navController
                         )
                     }
-                    composable<CreateTaskRoute> {
+                    composable<CreateTaskRoute>(enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left, tween(animationDuration)
+                        )
+                    }, exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right, tween(animationDuration)
+                        )
+                    }) {
                         CreateTaskScreen(navController = navController, addTask = { name, desc ->
                             viewModel.addTask(
                                 name = name, description = desc
                             )
                         })
                     }
-                    composable<TaskOverviewRoute> { backStack ->
+                    composable<TaskOverviewRoute>(enterTransition = {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right, tween(animationDuration)
+                        )
+                    }, exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left, tween(animationDuration)
+                        )
+                    }) { backStack ->
                         val route = backStack.toRoute<TaskOverviewRoute>()
                         TaskOverviewScreen(navController = navController,
                             id = route.id,

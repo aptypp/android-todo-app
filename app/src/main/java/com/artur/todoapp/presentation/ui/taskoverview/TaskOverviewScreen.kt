@@ -48,7 +48,7 @@ fun TaskOverviewScreen(
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
     Scaffold(
-        topBar = { TopBar("Overview") },
+        topBar = { TopBar("Overview", navigateUp = { navController.navigateUp() }) },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         floatingActionButton = {
             Box(modifier = Modifier.imePadding()) {
